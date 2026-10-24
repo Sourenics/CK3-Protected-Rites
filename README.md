@@ -7,7 +7,7 @@ A Crusader Kings III mod that stops an AI Head of Rite from rewriting a rite you
 - **Game version:** 1.20.x
 - **Mod version:** 1.0.0
 - **Author:** [Sourenics](https://github.com/Sourenics)
-- **Steam Workshop:** coming soon
+- **Steam Workshop:** [Protected Rites](https://steamcommunity.com/sharedfiles/filedetails/?id=3826064639)
 
 ## Features
 
