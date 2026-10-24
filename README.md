@@ -5,13 +5,14 @@
 A Crusader Kings III mod that stops an AI Head of Rite from rewriting a rite you founded. Since update 1.20, the Head of Rite can edit the rite's tenets and doctrines once per lifetime. If you found a rite and its Head of Rite is an AI (for example, the clerical vassal of a secular ruler), the AI can reshape it until it has nothing in common with what you created, and push it towards heresy without you ever choosing it. With this mod, the rites you follow keep the tenets and doctrines you gave them, while the game's own rites work as in vanilla.
 
 - **Game version:** 1.20.x
-- **Mod version:** 1.0.0
+- **Mod version:** 1.0.1
 - **Author:** [Sourenics](https://github.com/Sourenics)
-- **Steam Workshop:** coming soon
+- **Steam Workshop:** [Protected Rites](https://steamcommunity.com/sharedfiles/filedetails/?id=3826064639)
 
 ## Features
 
-- **An AI Head of Rite cannot edit a protected rite.** Its tenets and doctrines stay as they were.
+- **An AI Head of Rite cannot change a protected rite.** It cannot edit it, and the yearly drift that lets an AI Head of Rite swap a rite's tenets or doctrines on its own skips protected rites. Their tenets and doctrines stay as they were.
+- **Heresy outbreaks never pick a protected rite to diverge.** They pick another rite of the faith instead.
 - **Which rites are protected:** a rite is protected while a player follows it, as long as it is not one of the game's own rites (Roman, Byzantine, Ambrosian, Carolingian, the heresies and so on). Rites founded during the game have no rite type, so any of them counts, including rites in an existing save. Rites founded by a player, or by a player's theological puppet, are also marked when they are founded.
 - **Players edit as usual.** If you are the Head of Rite, the vanilla rules apply: once per lifetime, piety cost and so on. Compatible with [Free Rite Editing](https://github.com/Sourenics/CK3-Free-Rite-Editing).
 - **Game rule PRR: Protect Mainline Rites**, in the game rules screen when starting a new game:
@@ -21,7 +22,7 @@ A Crusader Kings III mod that stops an AI Head of Rite from rewriting a rite you
   | Protected (default) | it stays protected: an AI Head of Faith cannot edit it either |
   | Not Protected (vanilla) | its Head of Faith can edit it as in the base game, until it stops being the mainline rite |
 
-- **Everything else stays vanilla.** Divergence, Ecumenical Councils, papal bulls, the tenet a newly elected AI Pope changes in his own rite, and changes to the mainline rite can still affect your rite or its divergence, as in the base game. Only the Head of Rite's edit is blocked.
+- **Everything else stays vanilla.** Divergence, Ecumenical Councils, papal bulls, the tenet a newly elected AI Pope changes in his own rite, and changes to the mainline rite can still affect your rite or its divergence, as in the base game. Only the changes made by the Head of Rite and by heresy outbreaks are blocked.
 - **A warning if something slips through.** If a protected rite changes its tenets or doctrines without a player edit while its Head of Rite is AI, you get a message, so a change the mod could not stop never goes unnoticed.
 
 ### Languages
@@ -46,7 +47,9 @@ Subscribe on the Steam Workshop page and enable the mod in the Paradox launcher.
 ## Compatibility
 
 - No DLC required.
-- Redefines one vanilla scripted rule, `can_edit_rite`, in its own file (`common/scripted_rules/zzz_prr_rules.txt`); the rule keeps the vanilla check and adds the protection. Other mods that redefine `can_edit_rite` are not compatible without a patch. It also adds to the `on_rite_created` and `on_rite_updated` on_actions without overriding them.
+- Redefines one vanilla scripted rule, `can_edit_rite`, in its own file (`common/scripted_rules/zzz_prr_rules.txt`); the rule keeps the vanilla check and adds the protection.
+- Overrides two vanilla scripted effects in its own file (`common/scripted_effects/zzz_prr_rite_effects.txt`): `rite_yearly_hor_divergence_drift_effect` (the Head of Rite's yearly drift) and `pam_heresy_c1_pick_diverging_rite_effect` (the rite a heresy outbreak diverges). Each is a copy of the vanilla effect with one added condition.
+- Other mods that redefine `can_edit_rite` or those two effects are not compatible without a patch. It also adds to the `on_rite_created` and `on_rite_updated` on_actions without overriding them.
 - Can be added to an existing save: rites founded during the game are recognised from the moment you enable it. Game rules cannot be changed after a game has started, so an existing save uses the default setting (Protected). Can be removed at any time.
 
 ## Reporting bugs
@@ -80,4 +83,4 @@ Forks, translations and alternative versions are welcome, provided that you:
 
 ### Paradox Interactive content
 
-Crusader Kings III and its content are © Paradox Interactive AB and are **not** covered by this license. This includes the `can_edit_rite` scripted rule, which is a copy of a Paradox rule with a small change by this mod. This project is an unofficial fan-made mod, not affiliated with or endorsed by Paradox Interactive. Like every CK3 mod, it must be distributed free of charge.
+Crusader Kings III and its content are © Paradox Interactive AB and are **not** covered by this license. This includes the `can_edit_rite` scripted rule and the two overridden scripted effects, which are copies of Paradox script with small changes by this mod. This project is an unofficial fan-made mod, not affiliated with or endorsed by Paradox Interactive. Like every CK3 mod, it must be distributed free of charge.

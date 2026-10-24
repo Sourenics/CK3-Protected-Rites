@@ -1,0 +1,104 @@
+﻿# Protected Rites - single-object overrides of two vanilla scripted effects (game 1.20.1.2):
+# - rite_yearly_hor_divergence_drift_effect, from common/scripted_effects/pam_effects.txt
+# - pam_heresy_c1_pick_diverging_rite_effect, from common/scripted_effects/pam_heresy_shared_effects.txt
+# Each effect is a vanilla copy; changes are marked PROTECTED RITES.
+
+# Vanilla values from pam_effects.txt: script variables only work in the file that defines them.
+@hor_drift_low_fervor = 40
+@hor_drift_high_fervor = 70
+
+# The yearly drift: once per lifetime, an AI Head of Rite may swap tenets or doctrines of a
+# non-mainline rite to change its divergence. Called from on_rite_yearly; root is the rite.
+rite_yearly_hor_divergence_drift_effect = {
+	if = {
+		limit = {
+			this != faith.main_rite
+			# PROTECTED RITES: an AI Head of Rite does not drift a protected rite
+			prr_rite_is_protected_trigger = no
+			# We leave rites that are already heretical alone, since heresy already covers that range
+			"divergence(faith.main_rite)" < faith.heresy_threshold
+			head_of_rite ?= {
+				is_available_ai_adult = yes
+				NOT = { has_character_flag = hor_already_drifted_rite_flag }
+			}
+		}
+		random = {
+			chance = {
+				value = 4
+				# Low fervor: lots of room for reinterpretation
+				if = {
+					limit = { faith.fervor <= @hor_drift_low_fervor }
+					add = 6
+				}
+				# Stable faith: rare drift
+				if = {
+					limit = { faith.fervor >= @hor_drift_high_fervor }
+					add = -2
+				}
+				# Unfulfilled HoR's do changes more often
+				if = {
+					limit = {
+						head_of_rite ?= {
+							spiritual_fulfillment <= 0
+						}
+					}
+					add = 4
+				}
+				if = {
+					limit = { head_of_rite ?= { has_trait = heresiarch } }
+					add = 25
+				}
+				min = 1
+			}
+
+			rite_yearly_hor_divergence_drift_apply_effect = yes
+		}
+	}
+}
+# Heresy outbreaks (Component 1): picks an existing non-mainline rite with an AI Head of Rite and
+# pushes its divergence up. Faith scope.
+pam_heresy_c1_pick_diverging_rite_effect = {
+	clear_saved_scope = diverging_rite
+
+	random_faith_rite = {
+		limit = {
+			this != faith.main_rite
+			rite_counties >= 1
+			head_of_rite ?= { is_ai = yes }
+			# PROTECTED RITES: a heresy outbreak never picks a protected rite to diverge
+			prr_rite_is_protected_trigger = no
+		}
+
+		weight = {
+			base = 5
+			# More divergent rites are more likely to deepen further.
+			modifier = {
+				add = 10
+				"divergence(faith.main_rite)" >= 25
+			}
+			modifier = {
+				add = 20
+				"divergence(faith.main_rite)" >= 50
+			}
+			modifier = {
+				add = 20
+				"divergence(faith.main_rite)" >= 75
+			}
+			# Pluralism-resistant rites are less prone to lurching toward heresy.
+			modifier = {
+				factor = 0.5
+				rite_has_parameter = pluralism_pluralistic_resistant_to_heresy
+			}
+			# Insular Celtic and Mozarabic are doctrinally weird but historically not the seedbed for heresy outbreaks; dampen without excluding outright.
+			modifier = {
+				factor = 0.1
+				OR = {
+					this = rite:insular_celtic
+					this = rite:mozarabic_church
+				}
+			}
+		}
+
+		save_scope_as = diverging_rite
+	}
+}

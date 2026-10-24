@@ -9,5 +9,5 @@ original author, link to the original project, indicate your changes, and releas
 version under the same license.
 
 Crusader Kings III and its content are (c) Paradox Interactive AB and are not covered by this
-license. This includes the can_edit_rite scripted rule, which is a copy of a Paradox rule with a
-small change by this mod.
+license. This includes the can_edit_rite scripted rule and the two overridden scripted effects,
+which are copies of Paradox script with small changes by this mod.

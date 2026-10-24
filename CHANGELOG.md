@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.1
+
+- Fixed: an AI Head of Rite could still change a protected rite through the yearly Head of Rite drift added in By God Alone, which swaps a rite's tenets or doctrines on its own and does not use the rite editor. The drift now skips protected rites.
+- Heresy outbreaks no longer pick a protected rite to diverge; they pick another rite of the faith instead.
+- Changes already made to a rite are not undone.
+
 ## 1.0.0
 
 - First release.
