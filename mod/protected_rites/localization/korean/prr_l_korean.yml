@@ -1,0 +1,9 @@
+﻿l_korean:
+ rule_prr_mainline_protection:0 "#color_light_blue PRR:#! Protect Mainline Rites"
+ setting_prr_mainline_protected:0 "Protected"
+ setting_prr_mainline_protected_desc:0 "A rite protected by the mod stays protected after it becomes the [mainline_rite|E] of its [faith|E]: an AI [head_of_faith|E] cannot edit it either.\n\nA rite is protected while a player follows it, if it is not one of the game's own rites. Only an AI [head_of_rite|E] is blocked; players edit as usual."
+ setting_prr_mainline_vanilla:0 "Not Protected (vanilla)"
+ setting_prr_mainline_vanilla_desc:0 "While a protected rite is the [mainline_rite|E] of its [faith|E], it loses its protection and its [head_of_faith|E] can edit it as in the base game. It is protected again as soon as it stops being the [mainline_rite|E]."
+
+ prr_msg_rite_changed_title:0 "Protected Rite Changed: [prr_player.GetRite.GetNameNoTooltip]"
+ prr_msg_rite_changed_desc:0 "The [prr_player.GetRite.GetName] [rite|E] changed its [core_tenets|E] or [doctrines|E] without a player edit while [prr_head.GetTitledFirstName], its [head_of_rite|E], is not a player. #weak If the [head_of_rite|E] edited it, Protected Rites could not stop the change: please report it with your error.log.#!"

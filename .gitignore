@@ -1,0 +1,18 @@
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Packaged builds (upload the mod folder, not the zip)
+*.zip
+*.7z
+
+# Never commit Crusader Kings III game files (they are Paradox's copyrighted content)
+game/
+game_files/
+
+# Private tooling
+generator/
+build/
+__pycache__/
+*.pyc

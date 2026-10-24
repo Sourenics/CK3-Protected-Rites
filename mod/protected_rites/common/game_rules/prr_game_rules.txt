@@ -1,0 +1,11 @@
+﻿# Protected Rites - game rules.
+# Whether a protected rite stays protected after it becomes the mainline rite of its faith.
+prr_mainline_protection = {
+	categories = { flavor }
+
+	default = prr_mainline_protected
+
+	prr_mainline_protected = {}
+
+	prr_mainline_vanilla = {}
+}

@@ -1,0 +1,13 @@
+Protected Rites - Copyright (c) 2026 Sourenics
+https://github.com/Sourenics/CK3-Protected-Rites
+
+Licensed under Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+https://creativecommons.org/licenses/by-sa/4.0/
+
+You may share and adapt this mod, including forks, as long as you credit Sourenics as the
+original author, link to the original project, indicate your changes, and release your
+version under the same license.
+
+Crusader Kings III and its content are (c) Paradox Interactive AB and are not covered by this
+license. This includes the can_edit_rite scripted rule, which is a copy of a Paradox rule with a
+small change by this mod.

@@ -1,0 +1,27 @@
+﻿# Protected Rites - scripted triggers.
+
+# Rite scope. A rite is protected while a player follows it, as long as it is not one of the game's
+# own rites: either a player (or a player's theological puppet) founded it, or it has no rite type.
+# With the game rule set to vanilla, a protected rite loses its protection while it is the mainline rite.
+prr_rite_is_protected_trigger = {
+	OR = {
+		has_variable = prr_player_founded_rite
+		NOT = { exists = rite_type }
+	}
+	trigger_if = {
+		limit = { has_game_rule = prr_mainline_vanilla }
+		this != faith.main_rite
+	}
+	save_temporary_scope_as = prr_checked_rite
+	any_player = {
+		rite = scope:prr_checked_rite
+	}
+}
+
+# Character scope. A player, or the theological puppet of a player.
+prr_is_player_or_player_puppet_trigger = {
+	OR = {
+		is_ai = no
+		puppeteer ?= { is_ai = no }
+	}
+}

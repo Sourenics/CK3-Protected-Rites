@@ -1,0 +1,9 @@
+﻿l_spanish:
+ rule_prr_mainline_protection:0 "#color_light_blue PRR:#! Proteger ritos principales"
+ setting_prr_mainline_protected:0 "Protegidos"
+ setting_prr_mainline_protected_desc:0 "Un rito protegido por el mod sigue protegido cuando pasa a ser el [mainline_rite|E] de su [faith|E]: tampoco puede editarlo un [head_of_faith|E] de la IA.\n\nUn rito está protegido mientras lo sigue un jugador, si no es uno de los ritos del juego. Solo se bloquea al [head_of_rite|E] de la IA; los jugadores editan como siempre."
+ setting_prr_mainline_vanilla:0 "Sin protección (vanilla)"
+ setting_prr_mainline_vanilla_desc:0 "Mientras un rito protegido es el [mainline_rite|E] de su [faith|E], pierde la protección y su [head_of_faith|E] puede editarlo como en el juego base. Vuelve a estar protegido en cuanto deja de ser el [mainline_rite|E]."
+
+ prr_msg_rite_changed_title:0 "Rito protegido modificado: [prr_player.GetRite.GetNameNoTooltip]"
+ prr_msg_rite_changed_desc:0 "El [rite|E] [prr_player.GetRite.GetName] ha cambiado sus [core_tenets|E] o [doctrines|E] sin que lo edite un jugador, y su [head_of_rite|E], [prr_head.GetTitledFirstName], no es un jugador. #weak Si lo ha editado el [head_of_rite|E], Protected Rites no ha podido impedirlo: avisa del problema adjuntando tu error.log.#!"

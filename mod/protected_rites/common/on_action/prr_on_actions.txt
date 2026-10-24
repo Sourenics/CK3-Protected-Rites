@@ -1,0 +1,52 @@
+﻿# Protected Rites - on_actions. Vanilla on_actions are only extended through on_actions lists,
+# so no vanilla effect block is overridden.
+
+on_rite_created = {
+	on_actions = { prr_on_rite_created }
+}
+
+on_rite_updated = {
+	on_actions = { prr_on_rite_updated }
+}
+
+# Root is the creator. Marks the new rite if a player, or a player's theological puppet, founded it.
+prr_on_rite_created = {
+	effect = {
+		if = {
+			limit = { prr_is_player_or_player_puppet_trigger = yes }
+			rite ?= {
+				if = {
+					limit = { rite_founder ?= root }
+					set_variable = prr_player_founded_rite
+				}
+			}
+		}
+	}
+}
+
+# Root is the rite. Tells the players of a protected rite when it changed without a player edit
+# while its Head of Rite is AI, so a change the mod could not stop never goes unnoticed.
+prr_on_rite_updated = {
+	trigger = {
+		exists = scope:changed_tenets_or_doctrines
+		NOT = { exists = scope:consume_rite_edit_token }
+		# Ecumenical councils change the mainline rite on purpose, with their own notification
+		NOT = { faith = { has_variable = ecumenical_council_ongoing } }
+		prr_rite_is_protected_trigger = yes
+		head_of_rite ?= { is_ai = yes }
+	}
+	effect = {
+		head_of_rite = { save_scope_as = prr_head }
+		debug_log = "Protected Rites: a protected rite changed without a player edit while its Head of Rite is AI"
+		every_player = {
+			limit = { rite = root }
+			save_scope_as = prr_player
+			send_interface_message = {
+				type = msg_rite_updated
+				title = prr_msg_rite_changed_title
+				desc = prr_msg_rite_changed_desc
+				left_icon = scope:prr_head
+			}
+		}
+	}
+}

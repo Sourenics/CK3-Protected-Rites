@@ -1,0 +1,85 @@
+name: Bug report
+description: Something does not work as expected
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting! Please fill in every required field: without them we usually cannot reproduce the problem.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: Describe the problem. What did you expect to happen instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: rite
+    attributes:
+      label: Rite, Head of Rite and game rule
+      description: The rite that changed or could not be edited, who founded it, who its Head of Rite is (player or AI), whether it is the mainline rite, and the PRR game rule setting.
+      placeholder: |
+        Rite: Castilian Christianity (founded by me)
+        Head of Rite: AI archbishop
+        Mainline rite: no
+        Setting: Protected
+    validations:
+      required: true
+
+  - type: input
+    id: game-version
+    attributes:
+      label: Game version
+      description: Shown in the main menu.
+      placeholder: "1.20.1.2"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: source
+    attributes:
+      label: Installed from
+      options:
+        - Steam Workshop
+        - Manual (GitHub)
+    validations:
+      required: true
+
+  - type: textarea
+    id: dlcs-mods
+    attributes:
+      label: Active DLCs and full mod list (in load order)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: only-this-mod
+    attributes:
+      label: Does it also happen with only Protected Rites enabled?
+      options:
+        - "Yes"
+        - "No"
+        - Not tested
+    validations:
+      required: true
+
+  - type: textarea
+    id: error-log
+    attributes:
+      label: error.log
+      description: |
+        Drag and drop your error.log file into this box. It is overwritten every time the game starts: copy it right after the problem, before relaunching.
+        Windows: Documents/Paradox Interactive/Crusader Kings III/logs/error.log
+        Linux: ~/.local/share/Paradox Interactive/Crusader Kings III/logs/error.log
+        macOS: ~/Documents/Paradox Interactive/Crusader Kings III/logs/error.log
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Optional, but very helpful for visual problems. Drag and drop images here.
