@@ -7,3 +7,14 @@
 
  prr_msg_rite_changed_title:0 "Rito protegido modificado: [prr_player.GetRite.GetNameNoTooltip]"
  prr_msg_rite_changed_desc:0 "El [rite|E] [prr_player.GetRite.GetName] ha cambiado sus [core_tenets|E] o [doctrines|E] sin que lo edite un jugador, y su [head_of_rite|E], [prr_head.GetTitledFirstName], no es un jugador. #weak Si lo ha editado el [head_of_rite|E], Protected Rites no ha podido impedirlo: avisa del problema adjuntando tu error.log.#!"
+
+ rule_prr_prohibit_protection:0 "#color_light_blue PRR:#! Prohibir principios protegidos"
+ setting_prr_prohibit_allowed:0 "Permitido (vanilla)"
+ setting_prr_prohibit_allowed_desc:0 "Un [head_of_faith|E] de la IA puede prohibir en toda la [faith|E] un principio que forma parte de los [core_tenets|E] de un rito protegido, con un [ecumenical_council|E], una bula o una decisión. El rito lo conserva como principio central; su divergencia aumenta."
+ setting_prr_prohibit_blocked:0 "Bloqueado"
+ setting_prr_prohibit_blocked_desc:0 "Solo los jugadores, y no la IA, pueden prohibir un principio que forma parte de los [core_tenets|E] de un rito protegido. La IA no puede hacerlo ni en un [ecumenical_council|E] que convoque, ni con una bula o una decisión de un [head_of_faith|E] de la IA."
+
+ prr_ecumenical_council_blocked_desc:0 "\n\n#weak Aunque tenía mayoría, la propuesta ha fracasado: habría cambiado un [rite|E] que sigue un jugador, y Protected Rites lo protege de la IA.#!"
+ prr_compat.0001.t:0 "Mods incompatibles"
+ prr_compat.0001.desc:0 "#N Protected Rites#! y #N Head of Faith Council Veto#! están cargados a la vez.\n\nLos dos mods sustituyen el recuento de votos de los concilios ecuménicos, así que allí solo puede funcionar uno: el juego usa el de Protected Rites, y el veto del Jefe de Fe no se aplica.\n\nDeja solo uno de ellos: desactiva el otro en el lanzador. Los dos se pueden quitar de una partida empezada."
+ prr_compat.0001.a:0 "Entendido"

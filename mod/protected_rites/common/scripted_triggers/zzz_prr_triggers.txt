@@ -1,0 +1,209 @@
+﻿# Protected Rites - single-object overrides of five vanilla scripted triggers from
+# common/scripted_triggers/pam_scripted_triggers.txt (game 1.20.1.2). Each trigger is a vanilla copy;
+# changes are marked PROTECTED RITES. Every other trigger in that file stays vanilla.
+
+# Doctrine scope, in the Reaffirm Doctrine interaction of a Head of Faith (scope:actor) towards the
+# Head of Rite of another rite of the faith (scope:recipient).
+pam_doctrine_can_be_reaffirm = {
+	OR = {
+		this = doctrine:doctrine_monogamy
+		this = doctrine:doctrine_polygamy
+		this = doctrine:doctrine_concubines
+
+		this = doctrine:doctrine_divorce_disallowed
+		this = doctrine:doctrine_divorce_approval
+		this = doctrine:doctrine_divorce_allowed
+
+		this = doctrine:doctrine_bastardry_none
+		this = doctrine:doctrine_bastardry_legitimization
+		this = doctrine:doctrine_bastardry_all
+
+		this = doctrine:doctrine_homosexuality_crime
+		this = doctrine:doctrine_homosexuality_shunned
+		this = doctrine:doctrine_homosexuality_accepted
+
+		this = doctrine:doctrine_deviancy_crime
+		this = doctrine:doctrine_deviancy_shunned
+		this = doctrine:doctrine_deviancy_accepted
+		this = doctrine:doctrine_deviancy_virtuous
+
+		this = doctrine:doctrine_adultery_men_crime
+		this = doctrine:doctrine_adultery_men_shunned
+		this = doctrine:doctrine_adultery_men_accepted
+
+		this = doctrine:doctrine_adultery_women_crime
+		this = doctrine:doctrine_adultery_women_shunned
+		this = doctrine:doctrine_adultery_women_accepted
+
+		this = doctrine:doctrine_kinslaying_any_dynasty_member_crime
+		this = doctrine:doctrine_kinslaying_extended_family_crime
+		this = doctrine:doctrine_kinslaying_close_kin_crime
+		this = doctrine:doctrine_kinslaying_shunned
+		this = doctrine:doctrine_kinslaying_accepted
+
+		this = doctrine:doctrine_witchcraft_crime
+		this = doctrine:doctrine_witchcraft_shunned
+		this = doctrine:doctrine_witchcraft_accepted
+		this = doctrine:doctrine_witchcraft_virtuous
+
+		this = doctrine:doctrine_gender_male_dominated
+		this = doctrine:doctrine_gender_equal
+		this = doctrine:doctrine_gender_female_dominated
+
+		this = doctrine:doctrine_consanguinity_dynastic
+		this = doctrine:doctrine_consanguinity_restricted
+		this = doctrine:doctrine_consanguinity_cousins
+		this = doctrine:doctrine_consanguinity_aunt_nephew_and_uncle_niece
+		this = doctrine:doctrine_consanguinity_unrestricted
+
+		this = doctrine:doctrine_pluralism_fundamentalist
+		this = doctrine:doctrine_pluralism_righteous
+		this = doctrine:doctrine_pluralism_pluralistic
+
+		this = doctrine:doctrine_theocracy_temporal
+		this = doctrine:doctrine_theocracy_lay_clergy
+
+		this = doctrine:doctrine_no_head
+		this = doctrine:doctrine_spiritual_head
+		this = doctrine:doctrine_temporal_head
+
+		this = doctrine:doctrine_clerical_function_taxation
+		this = doctrine:doctrine_clerical_function_alms_and_pacification
+		this = doctrine:doctrine_clerical_function_recruitment
+
+		this = doctrine:doctrine_clerical_gender_male_only
+		this = doctrine:doctrine_clerical_gender_either
+		this = doctrine:doctrine_clerical_gender_female_only
+
+		this = doctrine:doctrine_clerical_marriage_allowed
+		this = doctrine:doctrine_clerical_marriage_disallowed
+
+		this = doctrine:doctrine_clerical_succession_temporal_appointment
+		this = doctrine:doctrine_clerical_succession_spiritual_appointment
+		this = doctrine:doctrine_clerical_succession_temporal_fixed_appointment
+		this = doctrine:doctrine_clerical_succession_spiritual_fixed_appointment
+		this = doctrine:doctrine_clerical_succession_conditional
+
+		this = doctrine:doctrine_pilgrimage_forbidden
+		this = doctrine:doctrine_pilgrimage_encouraged
+		this = doctrine:doctrine_pilgrimage_local_rites
+		this = doctrine:doctrine_pilgrimage_mandatory
+		this = doctrine:doctrine_pilgrimage_mandatory_hajj
+
+		this = doctrine:doctrine_funeral_stoic
+		this = doctrine:doctrine_funeral_bewailment
+		this = doctrine:doctrine_funeral_cremation
+		this = doctrine:doctrine_funeral_sky_burial
+		this = doctrine:doctrine_funeral_mummification
+		this = doctrine:doctrine_family_rites
+
+		this = doctrine:doctrine_no_anointment
+		this = doctrine:doctrine_anointment_permitted
+		this = doctrine:doctrine_imperial_anointment
+
+		this = doctrine:doctrine_monotheist
+		this = doctrine:doctrine_polytheist
+
+		this = doctrine:doctrine_monasticism_encouraged
+		this = doctrine:doctrine_monasticism_accepted
+		this = doctrine:doctrine_monasticism_absent
+		this = doctrine:doctrine_monasticism_forbidden
+
+		this = doctrine:doctrine_sacraments_central
+		this = doctrine:doctrine_sacraments_absent
+	}
+	# PROTECTED RITES: an AI Head of Faith cannot reaffirm a doctrine on a protected rite
+	trigger_if = {
+		limit = {
+			exists = scope:actor
+			exists = scope:recipient
+			scope:actor = { is_ai = yes }
+		}
+		scope:recipient.rite ?= { prr_rite_is_protected_trigger = no }
+	}
+}
+
+# Character scope. An AI Catholic Head of Faith can proclaim Armed Pilgrimages a core tenet of the
+# mainline rite (pam_proclaim_crusade_age_tenet_decision).
+pam_ai_can_proclaim_armed_pilgrimages_core_trigger = {
+	faith = {
+		this = faith:catholic
+		has_doctrine = doctrine_spiritual_head
+		main_rite = {
+			NOT = {
+				has_tenet_status = {
+					tenet = tenet_armed_pilgrimages
+					status = core
+				}
+			}
+		}
+	}
+	# PROTECTED RITES: the AI does not make a tenet core in a protected mainline rite
+	faith.main_rite = { prr_rite_is_protected_trigger = no }
+}
+
+# Character scope. The Islamic counterpart: Struggle and Submission as a core tenet of the mainline rite.
+pam_ai_can_proclaim_struggle_submission_core_trigger = {
+	faith.religion = {
+		this = religion:islam_religion
+		exists = var:variable_ghw_unlocked # You've entered the Age of Crusades
+	}
+	faith = {
+		main_rite = {
+			NOT = {
+				has_tenet_status = {
+					tenet = tenet_struggle_submission
+					status = core
+				}
+			}
+		}
+	}
+	# PROTECTED RITES: the AI does not make a tenet core in a protected mainline rite
+	faith.main_rite = { prr_rite_is_protected_trigger = no }
+}
+
+# Tenet scope. A Head of Faith (scope:actor) can prohibit the tenet with a bull or decision.
+pam_tenet_can_be_prohibited_trigger = {
+	save_temporary_scope_as = pam_tenet_candidate
+	custom_tooltip = {
+		text = pam_tenet_stance_can_be_prohibited_tt
+		scope:actor.rite = {
+			NOR = {
+				has_tenet_status = { tenet = scope:pam_tenet_candidate status = prohibited }
+				has_tenet_status = { tenet = scope:pam_tenet_candidate status = core }
+			}
+		}
+	}
+	# PROTECTED RITES: with the game rule set to block it, an AI Head of Faith cannot prohibit a core
+	# tenet of a protected rite
+	trigger_if = {
+		limit = {
+			has_game_rule = prr_prohibit_blocked
+			scope:actor = { is_ai = yes }
+		}
+		NOT = { prr_tenet_is_core_in_protected_rite_trigger = { FAITH = scope:actor.faith } }
+	}
+}
+
+# Tenet scope. As above, with the Head of Faith as root.
+pam_tenet_can_be_prohibited_no_actor_trigger = {
+	save_temporary_scope_as = pam_tenet_candidate
+	custom_tooltip = {
+		text = pam_tenet_stance_can_be_prohibited_tt
+		root.rite = {
+			NOR = {
+				has_tenet_status = { tenet = scope:pam_tenet_candidate status = prohibited }
+				has_tenet_status = { tenet = scope:pam_tenet_candidate status = core }
+			}
+		}
+	}
+	# PROTECTED RITES: with the game rule set to block it, an AI Head of Faith cannot prohibit a core
+	# tenet of a protected rite
+	trigger_if = {
+		limit = {
+			has_game_rule = prr_prohibit_blocked
+			root = { is_ai = yes }
+		}
+		NOT = { prr_tenet_is_core_in_protected_rite_trigger = { FAITH = root.faith } }
+	}
+}

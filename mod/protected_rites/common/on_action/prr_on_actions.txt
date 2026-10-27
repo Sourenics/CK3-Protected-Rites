@@ -9,6 +9,14 @@ on_rite_updated = {
 	on_actions = { prr_on_rite_updated }
 }
 
+on_game_start_after_lobby = {
+	on_actions = { prr_mark_mod_loaded }
+}
+
+yearly_global_pulse = {
+	on_actions = { prr_mark_mod_loaded }
+}
+
 # Root is the creator. Marks the new rite if a player, or a player's theological puppet, founded it.
 prr_on_rite_created = {
 	effect = {
@@ -47,6 +55,41 @@ prr_on_rite_updated = {
 				desc = prr_msg_rite_changed_desc
 				left_icon = scope:prr_head
 			}
+		}
+	}
+}
+
+# Incompatible mods. Each loaded mod marks itself at game start and every year for a little less than a
+# year, so a mark disappears soon after its mod is removed. A day later, if Head of Faith Council Veto
+# (1.1.1 or later) has marked itself too, the players get an event once per game. Only this mod warns.
+prr_mark_mod_loaded = {
+	effect = {
+		set_global_variable = {
+			name = prr_mod_loaded
+			value = yes
+			days = 360
+		}
+		trigger_event = {
+			on_action = prr_check_incompatible_mods
+			days = 1
+		}
+	}
+}
+
+prr_check_incompatible_mods = {
+	trigger = {
+		has_global_variable = prr_mod_loaded
+		has_global_variable = hfcv_mod_loaded
+		NOT = { has_global_variable = prr_hfcv_incompatible_warned }
+	}
+	effect = {
+		set_global_variable = {
+			name = prr_hfcv_incompatible_warned
+			value = yes
+		}
+		debug_log = "Protected Rites: Head of Faith Council Veto is also loaded; both mods override the Ecumenical Council vote tally"
+		every_player = {
+			trigger_event = prr_compat.0001
 		}
 	}
 }

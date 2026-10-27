@@ -9,3 +9,15 @@ prr_mainline_protection = {
 
 	prr_mainline_vanilla = {}
 }
+
+# Whether the AI can prohibit, for the whole faith, a tenet that is a core tenet of a protected rite.
+# The rite keeps the tenet either way; a prohibited core tenet only raises its divergence.
+prr_prohibit_protection = {
+	categories = { flavor }
+
+	default = prr_prohibit_allowed
+
+	prr_prohibit_allowed = {}
+
+	prr_prohibit_blocked = {}
+}

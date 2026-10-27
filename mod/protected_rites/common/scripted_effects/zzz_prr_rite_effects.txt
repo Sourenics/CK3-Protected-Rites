@@ -1,6 +1,7 @@
-﻿# Protected Rites - single-object overrides of two vanilla scripted effects (game 1.20.1.2):
+﻿# Protected Rites - single-object overrides of three vanilla scripted effects (game 1.20.1.2):
 # - rite_yearly_hor_divergence_drift_effect, from common/scripted_effects/pam_effects.txt
 # - pam_heresy_c1_pick_diverging_rite_effect, from common/scripted_effects/pam_heresy_shared_effects.txt
+# - head_of_faith_change_core_tenet_effect, from common/scripted_effects/11_dlc_pam_scripted_effects.txt
 # Each effect is a vanilla copy; changes are marked PROTECTED RITES.
 
 # Vanilla values from pam_effects.txt: script variables only work in the file that defines them.
@@ -100,5 +101,41 @@ pam_heresy_c1_pick_diverging_rite_effect = {
 		}
 
 		save_scope_as = diverging_rite
+	}
+}
+
+# A newly elected AI Head of Faith swaps one core tenet of his own rite. Called from
+# pam_clergy_events.0002; root is the new Head of Faith.
+head_of_faith_change_core_tenet_effect = {
+	head_of_faith_set_up_change_core_tenet_effect = yes # Decoupled so it can also be used in the UI
+
+	rite = { save_scope_as = pam_recast_rite }
+	if = {
+		limit = {
+			exists = scope:tenet_to_add
+			exists = scope:tenet_to_remove
+			# The new Pope is already head of the rite here, so we look for the edit marker on the players
+			NOT = {
+				any_player = {
+					rite = scope:pam_recast_rite
+					exists = var:has_edited_a_rite
+				}
+			}
+			# PROTECTED RITES: a newly elected AI Head of Faith does not recast a protected rite
+			scope:pam_recast_rite = { prr_rite_is_protected_trigger = no }
+		}
+		save_scope_as = pam_recast_pope
+		scope:pam_recast_rite = {
+			remove_rite_tenet = scope:tenet_to_remove
+			add_rite_tenet = scope:tenet_to_add
+		}
+		pam_pope_core_tenet_popularity_catalyst_effect = yes
+		# Only an AI Pope reaches this branch
+		every_player = {
+			limit = {
+				rite = scope:pam_recast_rite
+			}
+			trigger_event = pam_clergy_events.0003
+		}
 	}
 }

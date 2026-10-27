@@ -1,0 +1,335 @@
+﻿namespace = ecumenical_council_events
+
+# Protected Rites - single-event override of ecumenical_council_events.0080 (the vote tally) from
+# events/activities/ecumenical_council_activity/pam_ecumenical_council_events.txt (game 1.20.1.2).
+# Vanilla copy; changes are marked PROTECTED RITES.
+# Not compatible with Head of Faith Council Veto, which overrides the same event; if both are loaded, this
+# override is used.
+
+# PROTECTED RITES: copy of the vanilla file-local save_major_scopes_effect, which can only be used in
+# its own file.
+scripted_effect prr_save_major_scopes_effect = {
+	save_scope_as = actor # needed for values
+	scope:activity = {
+		random_in_list = {
+			variable = major_innovator
+			limit = {
+				this != scope:actor
+			}
+			save_scope_as = lead_innovator
+		}
+		random_in_list = {
+			variable = major_conservative
+			limit = {
+				this != scope:actor
+			}
+			save_scope_as = lead_conservative
+		}
+		# Fallback
+		if = {
+			limit = {
+				NOT = { exists = scope:lead_innovator }
+			}
+			ordered_attending_character = {
+				order_by = highest_held_title_tier
+				limit = {
+					this != scope:actor
+					trigger_if = {
+						limit = {
+							exists = scope:lead_conservative
+						}
+						this != scope:lead_conservative
+					}
+					is_clergy = yes
+				}
+				save_scope_as = lead_innovator
+			}
+		}
+		if = {
+			limit = {
+				NOT = { exists = scope:lead_conservative }
+			}
+			ordered_attending_character = {
+				order_by = highest_held_title_tier
+				limit = {
+					this != scope:actor
+					trigger_if = {
+						limit = {
+							exists = scope:lead_innovator
+						}
+						this != scope:lead_innovator
+					}
+					is_clergy = yes
+				}
+				save_scope_as = lead_conservative
+			}
+		}
+	}
+	# Save for portrait
+	if = {
+		limit = {
+			scope:lead_innovator.piety >= scope:lead_conservative.piety
+		}
+		scope:lead_innovator = {
+			save_scope_as = lead_portrait
+		}
+	}
+	else = {
+		scope:lead_conservative = {
+			save_scope_as = lead_portrait
+		}
+	}
+	cp:councillor_court_chaplain ?= {
+		save_scope_as = court_chaplain
+	}
+	if = {
+		limit = {
+			NOT = { exists = scope:court_chaplain }
+		}
+		ordered_attending_character = {
+			order_by = highest_held_title_tier
+			limit = {
+				this != scope:actor
+				trigger_if = {
+					limit = {
+						exists = scope:lead_conservative
+					}
+					this != scope:lead_conservative
+				}
+				trigger_if = {
+					limit = {
+						exists = scope:lead_innovator
+					}
+					this != scope:lead_innovator
+				}
+				is_clergy = yes
+			}
+			save_scope_as = court_chaplain
+		}
+	}
+}
+
+ecumenical_council_events.0080 = {
+	type = activity_event
+	# PROTECTED RITES: overrides the vanilla event of the same id. Higher than Head of Faith Council Veto (10),
+	# so that if both mods are loaded, this one is used and the game does not report a duplicate.
+	id_override_priority = 20
+	title = ecumenical_council_events.0080.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { scope:activity.var:last_debate_passed ?= flag:passed }
+				desc = ecumenical_council_events.0080.desc.passed
+			}
+			desc = ecumenical_council_events.0080.desc.failed
+		}
+		# PROTECTED RITES: explain why a majority still failed
+		triggered_desc = {
+			trigger = { exists = scope:prr_blocked }
+			desc = prr_ecumenical_council_blocked_desc
+		}
+		triggered_desc = {
+			trigger = {
+				exists = scope:ec_current_topic
+				NOT = { exists = scope:activity.var:third_debate_resolution }
+			}
+			desc = {
+				# Mechanical tenet outcome line: topic + proposed status.
+				first_valid = {
+					triggered_desc = {
+						trigger = {
+							scope:activity.var:last_debate_passed ?= flag:passed
+							scope:activity.var:current_debate_proposal ?= flag:make_core
+							exists = scope:core_tenet_to_swap
+						}
+						desc = ecumenical_council_events.0080.desc.outcome.passed.make_core
+					}
+					triggered_desc = {
+						trigger = {
+							scope:activity.var:last_debate_passed ?= flag:passed
+							OR = {
+								scope:activity.var:current_debate_proposal ?= flag:permit
+								scope:activity.var:current_debate_proposal ?= flag:prohibit
+								scope:activity.var:current_debate_proposal ?= flag:learn
+								scope:activity.var:current_debate_proposal ?= flag:make_core
+							}
+						}
+						desc = ecumenical_council_events.0080.desc.outcome.passed
+					}
+					triggered_desc = {
+						trigger = {
+							OR = {
+								scope:activity.var:current_debate_proposal ?= flag:permit
+								scope:activity.var:current_debate_proposal ?= flag:prohibit
+								scope:activity.var:current_debate_proposal ?= flag:learn
+								scope:activity.var:current_debate_proposal ?= flag:make_core
+							}
+						}
+						desc = ecumenical_council_events.0080.desc.outcome.failed
+					}
+				}
+			}
+		}
+	}
+	theme = ecumenical_council
+	left_portrait = {
+		character = root
+		animation = personality_zealous
+	}
+	right_portrait = {
+		character = scope:lead_portrait
+		animation = preaching_no_book
+	}
+
+	immediate = {
+		prr_save_major_scopes_effect = yes
+		scope:activity = {
+			var:current_topic ?= { save_scope_as = ec_current_topic }
+			every_guest_subset = {
+				name = innovator
+				add_to_list = ec_innovators
+			}
+			every_guest_subset = {
+				name = conservative
+				add_to_list = ec_conservatives
+			}
+		}
+		# Saved values, not activity variables: the tally is only read by loc, and an unused variable is a startup error; 0081 inherits them
+		save_scope_value_as = {
+			name = ec_vote_for
+			value = list_size:ec_innovators
+		}
+		save_scope_value_as = {
+			name = ec_vote_against
+			value = list_size:ec_conservatives
+		}
+		if = {
+			limit = { exists = scope:activity.var:core_tenet_to_swap_2 }
+			scope:activity.var:core_tenet_to_swap_2 = { save_scope_as = core_tenet_to_swap }
+		}
+		else = {
+			scope:activity.var:core_tenet_to_swap_1 ?= { save_scope_as = core_tenet_to_swap }
+		}
+		# PROTECTED RITES: a proposal of an AI host that would change a protected rite fails even with a majority
+		if = {
+			limit = {
+				list_size:ec_innovators >= list_size:ec_conservatives
+				prr_council_proposal_blocked_trigger = yes
+			}
+			save_scope_value_as = {
+				name = prr_blocked
+				value = yes
+			}
+			debug_log = "Protected Rites: an Ecumenical Council proposal that would change a protected rite failed"
+		}
+		if = {
+			limit = {
+				list_size:ec_innovators >= list_size:ec_conservatives
+				NOT = { exists = scope:prr_blocked }
+			}
+			scope:activity = { set_variable = { name = last_debate_passed value = flag:passed } }
+			if = {
+				limit = { exists = scope:activity.var:current_debate_proposal }
+				scope:activity = {
+					add_activity_log_entry = {
+						key = ecumenical_council_debate_outcome_log
+						score = 80
+						tags = { completed }
+						show_in_conclusion = yes
+						character = scope:host
+						location = scope:host.location
+						ecumenical_council_apply_debate_outcome_effect = yes
+					}
+				}
+				# Announced once per council, not once per debate; the letter covers the rest at the end.
+				if = {
+					limit = { NOT = { exists = scope:activity.var:ec_ruling_announced } }
+					scope:activity = {
+						set_variable = {
+							name = ec_ruling_announced
+							value = yes
+						}
+					}
+					# Only players engaged with the Christian Church.
+					every_player = {
+						limit = {
+							faith = scope:host.faith
+							NOT = { involved_activity ?= scope:activity }
+							any_character_situation = {
+								this = situation:the_christian_church
+							}
+						}
+						send_interface_message = {
+							type = msg_ecumenical_council_ruling
+							left_icon = scope:host
+						}
+					}
+				}
+			}
+		}
+		else = {
+			scope:activity = {
+				add_activity_log_entry = {
+					key = ecumenical_council_debate_outcome_log
+					score = 80
+					tags = { completed }
+					show_in_conclusion = yes
+					character = scope:host
+					location = scope:host.location
+					set_variable = { name = last_debate_passed value = flag:failed }
+					if = {
+						limit = {
+							NOT = { exists = var:first_debate_resolution }
+						}
+						set_variable = {
+							name = first_debate_resolution
+							value = flag:failed
+						}
+						custom_tooltip = first_debate_resolultion_failed_tt
+					}
+					else_if = {
+						limit = {
+							NOT = { exists = var:second_debate_resolution }
+						}
+						set_variable = {
+							name = second_debate_resolution
+							value = flag:failed
+						}
+						custom_tooltip = second_debate_resolultion_failed_tt
+					}
+					else = {
+						set_variable = {
+							name = third_debate_resolution
+							value = flag:failed
+						}
+						custom_tooltip = third_debate_resolultion_failed_tt
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = ecumenical_council_events.0080.a
+		custom_tooltip = ecumenical_council_vote_tally_tt
+		show_as_tooltip = {
+			ecumenical_council_current_debate_personal_tenet_fulfillment_effect = yes
+		}
+		ai_chance = {
+			base = 100
+		}
+	}
+
+	after = {
+		scope:activity = {
+			every_attending_character = {
+				limit = {
+					this != scope:host
+
+				}
+				trigger_event = ecumenical_council_events.0081
+			}
+		}
+	}
+}
+

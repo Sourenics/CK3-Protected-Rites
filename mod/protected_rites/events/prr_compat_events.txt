@@ -1,0 +1,14 @@
+﻿namespace = prr_compat
+
+# Protected Rites - tells a player that Protected Rites and Head of Faith Council Veto are both loaded.
+# Fired once per game from prr_check_incompatible_mods.
+prr_compat.0001 = {
+	type = character_event
+	title = prr_compat.0001.t
+	desc = prr_compat.0001.desc
+	theme = faith
+
+	option = {
+		name = prr_compat.0001.a
+	}
+}

@@ -7,3 +7,14 @@
 
  prr_msg_rite_changed_title:0 "Protected Rite Changed: [prr_player.GetRite.GetNameNoTooltip]"
  prr_msg_rite_changed_desc:0 "The [prr_player.GetRite.GetName] [rite|E] changed its [core_tenets|E] or [doctrines|E] without a player edit while [prr_head.GetTitledFirstName], its [head_of_rite|E], is not a player. #weak If the [head_of_rite|E] edited it, Protected Rites could not stop the change: please report it with your error.log.#!"
+
+ rule_prr_prohibit_protection:0 "#color_light_blue PRR:#! Prohibit Protected Tenets"
+ setting_prr_prohibit_allowed:0 "Allowed (vanilla)"
+ setting_prr_prohibit_allowed_desc:0 "An AI [head_of_faith|E] can prohibit, for the whole [faith|E], a tenet that is one of the [core_tenets|E] of a protected rite, with an [ecumenical_council|E], a bull or a decision. The rite keeps it as a core tenet; its divergence grows."
+ setting_prr_prohibit_blocked:0 "Blocked"
+ setting_prr_prohibit_blocked_desc:0 "Only players, not the AI, can prohibit a tenet that is one of the [core_tenets|E] of a protected rite. The AI cannot do it at an [ecumenical_council|E] it hosts, nor with a bull or a decision of an AI [head_of_faith|E]."
+
+ prr_ecumenical_council_blocked_desc:0 "\n\n#weak Although it had a majority, the proposal failed: it would have changed a [rite|E] that a player follows, which Protected Rites protects from the AI.#!"
+ prr_compat.0001.t:0 "Incompatible Mods"
+ prr_compat.0001.desc:0 "#N Protected Rites#! and #N Head of Faith Council Veto#! are both loaded.\n\nBoth mods replace the vote count of Ecumenical Councils, so only one of them can work there: the game uses the one from Protected Rites, and the Head of Faith's veto does not apply.\n\nKeep only one of them: disable the other in the launcher. Both can be removed from an existing save."
+ prr_compat.0001.a:0 "I understand"

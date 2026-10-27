@@ -25,3 +25,38 @@ prr_is_player_or_player_puppet_trigger = {
 		puppeteer ?= { is_ai = no }
 	}
 }
+
+# Tenet scope. The tenet is a core tenet of a protected rite of $FAITH$.
+prr_tenet_is_core_in_protected_rite_trigger = {
+	save_temporary_scope_as = prr_checked_tenet
+	$FAITH$ = {
+		any_faith_rite = {
+			rite_has_tenet = scope:prr_checked_tenet
+			prr_rite_is_protected_trigger = yes
+		}
+	}
+}
+
+# Any scope, inside an Ecumenical Council (needs scope:host and scope:activity). The council's host is
+# an AI (not a player's theological puppet) and the debated proposal would change a protected rite:
+# making a tenet core or changing a doctrine changes the mainline rite, and, with the game rule set to
+# block it, prohibiting a tenet that is a core tenet of a protected rite.
+prr_council_proposal_blocked_trigger = {
+	scope:host = { prr_is_player_or_player_puppet_trigger = no }
+	OR = {
+		AND = {
+			OR = {
+				scope:activity.var:current_debate_proposal ?= flag:make_core
+				scope:activity.var:current_debate_proposal ?= flag:doctrine_change
+			}
+			scope:host.faith.main_rite = { prr_rite_is_protected_trigger = yes }
+		}
+		AND = {
+			has_game_rule = prr_prohibit_blocked
+			scope:activity.var:current_debate_proposal ?= flag:prohibit
+			scope:activity.var:current_topic ?= {
+				prr_tenet_is_core_in_protected_rite_trigger = { FAITH = scope:host.faith }
+			}
+		}
+	}
+}
