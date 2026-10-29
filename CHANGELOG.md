@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1
+
+- **Fixed:** without Head of Faith Council Veto loaded, `error.log` reported "Variable 'hfcv_mod_loaded' is used but is never set" every time the game loaded. The warning was harmless and nothing else changes.
+
 ## 1.1.0
 
 - An AI Head of Faith can no longer change a protected rite:

@@ -5,7 +5,7 @@
 A Crusader Kings III mod that stops the AI from rewriting a rite you founded. Since update 1.20, the Head of Rite can edit the rite's tenets and doctrines once per lifetime. If you found a rite and its Head of Rite is an AI (for example, the clerical vassal of a secular ruler), the AI can reshape it until it has nothing in common with what you created, and push it towards heresy without you ever choosing it. The Pope and other AI Heads of Faith can change it too: through Ecumenical Councils, by reaffirming a doctrine, or when a newly elected Pope swaps a tenet of his own rite. With this mod, nobody but a player can change the tenets and doctrines of the rites you follow, while the game's own rites work as in vanilla.
 
 - **Game version:** 1.20.x
-- **Mod version:** 1.1.0
+- **Mod version:** 1.1.1
 - **Author:** [Sourenics](https://github.com/Sourenics)
 - **Steam Workshop:** [Protected Rites](https://steamcommunity.com/sharedfiles/filedetails/?id=3826064639)
 

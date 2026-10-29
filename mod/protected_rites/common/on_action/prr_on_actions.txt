@@ -73,6 +73,16 @@ prr_mark_mod_loaded = {
 			on_action = prr_check_incompatible_mods
 			days = 1
 		}
+		# Never runs. hfcv_mod_loaded is set by Head of Faith Council Veto; without this, the game
+		# logs "Variable 'hfcv_mod_loaded' is used but is never set" at load when that mod is absent.
+		if = {
+			limit = { always = no }
+			set_global_variable = {
+				name = hfcv_mod_loaded
+				value = yes
+				days = 1
+			}
+		}
 	}
 }
 
